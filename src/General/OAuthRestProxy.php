@@ -28,8 +28,7 @@ class OAuthRestProxy extends RestClient
 {
     public function getAccessToken($grantType, $clientId, $clientSecret, $scope)
     {
-        $method         = Constants::HTTP_POST;
-        $queryParams    = array();
+        $queryParams    = [];
         $headers = [
             'Content-Type', 'application/x-www-form-urlencoded'
         ];
