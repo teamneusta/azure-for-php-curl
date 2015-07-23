@@ -22,45 +22,44 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-namespace Bennsel\WindowsAzureCurl\Service;
+namespace Bennsel\WindowsAzureCurl\Tests\Service;
 
 
-use Bennsel\WindowsAzureCurl\General\Constants;
-use Bennsel\WindowsAzureCurl\General\OAuthRestProxy;
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use Bennsel\WindowsAzureCurl\Service\MediaService;
+use Bennsel\WindowsAzureCurl\Service\Settings\MediaServiceSettings;
+use Bennsel\WindowsAzureCurl\TestSettings;
 
-class MediaService implements ServiceInterface
+class MediaServiceTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * mediaService
+     *
+     * @var MediaService
+     */
+    protected $mediaService;
 
     /**
      * settings
      *
-     * @var SettingsInterface
+     * @var MediaServiceSettings
      */
     protected $settings;
 
-    public function __construct(SettingsInterface $settings)
+    public function setUp()
     {
-        $this->settings = $settings;
-        $this->accessToken = $this->getAccessToken();
+        $this->settings = new MediaServiceSettings(TestSettings::AUTH_MEDIA_SERVICE_NAME, TestSettings::AUTH_MEDIA_SERVICE_KEY);
+        $this->mediaService = new MediaService($this->settings);
     }
 
-    protected function getAccessToken() {
-        if(!$this->accessToken || $this->accessToken->getExpiresIn() < time()) {
-            $oathRestProxy = new OAuthRestProxy();
-            $this->accessToken = $oathRestProxy->getAccessToken(
-                Constants::OAUTH_GT_CLIENT_CREDENTIALS,
-                $this->settings->getName(),
-                $this->settings->getKey(),
-                Constants::MEDIA_SERVICES_OAUTH_SCOPE
-            );
-        }
-
-        return $this->accessToken;
-    }
-
-    public function getJobList()
+    /**
+     * getJobListMethodShouldBeExist
+     *
+     * @test
+     * @return void
+     */
+    public function getJobListMethodShouldBeExist()
     {
-        return [];
+        $this->assertTrue(is_array($this->mediaService->getJobList()));
     }
 }

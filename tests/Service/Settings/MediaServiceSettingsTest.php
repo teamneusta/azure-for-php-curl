@@ -26,6 +26,7 @@ namespace Bennsel\WindowsAzureCurl\Tests\Service\Settings;
 
 
 use Bennsel\WindowsAzureCurl\Service\Settings\MediaServiceSettings;
+use Bennsel\WindowsAzureCurl\TestSettings;
 
 class MediaServiceSettingsTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +40,7 @@ class MediaServiceSettingsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mediaServiceSettings = new MediaServiceSettings('name', 'key');
+        $this->mediaServiceSettings = new MediaServiceSettings(TestSettings::AUTH_MEDIA_SERVICE_NAME, TestSettings::AUTH_MEDIA_SERVICE_KEY);
     }
 
     public function testShouldControlImplementationOfSettingsInterface()
@@ -54,12 +55,12 @@ class MediaServiceSettingsTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldControlIfConstructorArgumentNameAreSetTheValue()
     {
-        $this->assertSame($this->mediaServiceSettings->getName(), 'name');
+        $this->assertSame($this->mediaServiceSettings->getName(), TestSettings::AUTH_MEDIA_SERVICE_NAME);
     }
 
     public function testShouldControlIfConstructorArgumentKeyAreSetTheValue()
     {
-        $this->assertSame($this->mediaServiceSettings->getKey(), 'key');
+        $this->assertSame($this->mediaServiceSettings->getKey(), TestSettings::AUTH_MEDIA_SERVICE_KEY);
     }
 
 }

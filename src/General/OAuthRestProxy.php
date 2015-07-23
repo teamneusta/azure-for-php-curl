@@ -33,16 +33,20 @@ class OAuthRestProxy extends RestClient
             'Content-Type', 'application/x-www-form-urlencoded'
         ];
 
-        return $this->send(
-            Constants::MEDIA_SERVICES_OAUTH_URL,
-            $queryParams,
-            [
-                Constants::OAUTH_GRANT_TYPE => $grantType,
-                Constants::OAUTH_CLIENT_ID => $clientId,
-                Constants::OAUTH_CLIENT_SECRET => $clientSecret,
-                Constants::OAUTH_SCOPE => $scope
-            ],
-            $headers
+        return ModelBuilder::create(
+            'General\\OAuthAccessToken',
+            $this->send(
+                Constants::MEDIA_SERVICES_OAUTH_URL,
+                'post',
+                $queryParams,
+                [
+                    Constants::OAUTH_GRANT_TYPE => $grantType,
+                    Constants::OAUTH_CLIENT_ID => $clientId,
+                    Constants::OAUTH_CLIENT_SECRET => $clientSecret,
+                    Constants::OAUTH_SCOPE => $scope
+                ],
+                $headers
+            )
         );
     }
 }

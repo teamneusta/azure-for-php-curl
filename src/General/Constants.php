@@ -9,6 +9,7 @@ class Constants {
     const OAUTH_CLIENT_ID = 'client_id';
     const OAUTH_CLIENT_SECRET = 'client_secret';
     const OAUTH_SCOPE = 'scope';
+    const OAUTH_GT_CLIENT_CREDENTIALS = 'client_credentials';
 
     const HTTP_POST = 'POST';
 
