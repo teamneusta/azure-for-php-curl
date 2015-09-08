@@ -50,4 +50,18 @@ abstract class AbstractModel
         $func = create_function('$c', 'return strtoupper($c[1]);');
         return preg_replace_callback('/_([a-z])/', $func, $str);
     }
+
+    public function toArray()
+    {
+        $methods = get_class_methods(get_class($this));
+        $arr = [];
+        foreach($methods as $methodName) {
+            if(strpos($methodName, 'get') !== false) {
+                $arr[substr($methodName, 3)] = $this->{$methodName}();
+            }
+        }
+        $arr = array_filter($arr);
+        return $arr;
+        return json_encode($arr);
+    }
 }

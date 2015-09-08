@@ -23,17 +23,21 @@ class RestClient
         $this->settings = $settings;
     }
 
-    public function send($url, $method, array $parameters = [], array $postParameters = [], array $header = [])
+    public function send(
+        $url,
+        $method,
+        array $parameters = [],
+        array $postParameters = [],
+        array $header = [],
+        $content = ''
+    )
     {
         $curl = new Curl();
         $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
         $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
 
-        //$curl->setHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-
         $method = strtolower($method);
-        $url = strpos($url, '//') !== false ? $url : $this->url . $url;
+        $finalUrl = strpos($url, '//') !== false ? $url : $this->url . $url;
 
         if(!empty($this->authorization) && empty($header['Authorization'])) {
             $authClass = 'Bennsel\\WindowsAzureCurl\\Service\\Authorization\\'.$this->authorization;
@@ -41,11 +45,22 @@ class RestClient
             $header['Authorization'] = $class->getAuthorizationString($url, $method, $parameters, $header);
         }
 
+        if ($content && is_object($content) && method_exists($content, 'toArray')) {
+            $parameters = $content->toArray();
+        }
+
         foreach($header as $key => $value) {
             $curl->setHeader($key, $value);
         }
 
-        $r = $curl->$method($url, $parameters ?: $postParameters);
+        $orgHeader = $header;
+        $r = $curl->$method($finalUrl, $parameters ?: $postParameters);
+
+        if($curl->http_status_code == 301) {
+            $this->url = $curl->response_headers['Location'];
+            $r = $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
+        }
+
         return $r;
     }
 }

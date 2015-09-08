@@ -21,6 +21,7 @@ class BlobAuthorization {
         $this->settings = $settings;
 
         $date = gmdate("D, d M Y H:i:s") . ' GMT';
+        $this->canonicalizedHeaders['x-ms-copy-source'] = '';
         $this->canonicalizedHeaders['x-ms-date'] = $date;
         $this->canonicalizedHeaders['x-ms-version'] = $this->msVersion;
     }
@@ -30,18 +31,18 @@ class BlobAuthorization {
         'Content-Language' => '',
         'Content-Length' => '',
         'Content-MD5' => '',
+        'Content-Type' => '',
         'date' => '',
+        'If-Modified-Since' => '',
         'if-match' => '',
         'if-none-match' => '',
         'if-unmodified-since' => '',
-        'range' => '',
-        '',
-        ''
+        'range' => ''
     ];
 
     private $canonicalizedHeaders = [];
 
-    private $msVersion = '2013-08-15';
+    private $msVersion = '2015-02-21';
 
     /**
      * getCanonicalized
@@ -69,7 +70,7 @@ class BlobAuthorization {
         $stringToSign = [];
         $stringToSign[] = strtoupper($method);
         foreach($this->fixedHeaders as $headerKey => $headerValue) {
-            $stringToSign[] = !empty($header[$headerKey]) ? $header[$headerKey] : $headerValue;
+            $stringToSign[] = !empty($header[$headerKey]) || is_numeric($header[$headerKey]) ? $header[$headerKey] : $headerValue;
         }
 
         if(!empty($header)) {
@@ -80,6 +81,7 @@ class BlobAuthorization {
             }
         }
 
+        $this->canonicalizedHeaders = array_filter($this->canonicalizedHeaders);
         if (count($this->canonicalizedHeaders) > 0) {
             $canonicalizedHeaders = [];
             foreach($this->canonicalizedHeaders as $headerKey => $headerValue) {

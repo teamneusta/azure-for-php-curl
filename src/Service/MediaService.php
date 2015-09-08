@@ -27,6 +27,8 @@ namespace Bennsel\WindowsAzureCurl\Service;
 
 use Bennsel\WindowsAzureCurl\General\Constants;
 use Bennsel\WindowsAzureCurl\General\OAuthRestProxy;
+use Bennsel\WindowsAzureCurl\General\RestClient;
+use Bennsel\WindowsAzureCurl\Model\Media\Asset;
 use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
 class MediaService implements ServiceInterface
@@ -39,28 +41,106 @@ class MediaService implements ServiceInterface
      */
     protected $settings;
 
+    /**
+     * accessToken
+     *
+     * @var string
+     */
+    protected $accessToken;
+
+    /**
+     * restClient
+     *
+     * @var RestClient
+     */
+    protected $restClient;
+
+    protected $defaultHeader = [];
+
     public function __construct(SettingsInterface $settings)
     {
         $this->settings = $settings;
-        $this->accessToken = $this->getAccessToken();
-    }
-
-    protected function getAccessToken() {
-        if(!$this->accessToken || $this->accessToken->getExpiresIn() < time()) {
-            $oathRestProxy = new OAuthRestProxy();
-            $this->accessToken = $oathRestProxy->getAccessToken(
-                Constants::OAUTH_GT_CLIENT_CREDENTIALS,
-                $this->settings->getName(),
-                $this->settings->getKey(),
-                Constants::MEDIA_SERVICES_OAUTH_SCOPE
-            );
-        }
-
-        return $this->accessToken;
+        $this->restClient = new RestClient(Constants::MEDIA_SERVICES_URL, $this->settings, 'MediaAuthorization');
+        $this->defaultHeader['x-ms-version'] = '2.11';
+        $this->defaultHeader['Content-Type'] = 'application/json;odata=verbose';
+        $this->defaultHeader['Accept'] = 'application/json;odata=verbose';
     }
 
     public function getJobList()
     {
-        return [];
+        $ret = $this->restClient->send('Jobs', 'get', [], [], $this->defaultHeader);
+    }
+
+    public function getAssetList()
+    {
+        $skipping = 0;
+        $newArr = [];
+        $finish = false;
+        while(!$finish) {
+            $obj = $this->restClient->send('Assets', 'get', ['$skip' => $skipping], [], $this->defaultHeader);
+            $skipping = $skipping + 1000;
+            if (empty($obj->d->results)) {
+                $finish = true;
+            } else {
+                $newArr = array_merge($newArr, $obj->d->results);
+            }
+        }
+
+        return $newArr;
+    }
+
+    public function getAssetByName($name) {
+        $obj = $this->restClient->send('Assets', 'get', [
+            '$filter' => 'Name eq \'' . $name . '\''
+        ], [], $this->defaultHeader);
+        return $obj->d->results;
+    }
+
+    public function deleteAsset($assetId)
+    {
+        $obj = $this->restClient->send('Assets(\''.$assetId.'\')', 'delete', [], [], $this->defaultHeader);
+        return $obj;
+    }
+
+    public function createAsset(Asset $asset)
+    {
+        $r = $this->restClient->send('Assets', 'post', [], [], $this->defaultHeader, $asset);
+        $newAsset = new Asset(0);
+        $arr = [];
+        foreach($r->d as $k => $v) {
+            $arr[$k] = $v;
+        }
+        $newAsset->fromArray($arr);
+
+        $r = $this->restClient->send('AccessPolicies', 'post', [], [
+            'Name' => 'foo',
+            'DurationInMinutes' => 1000,
+            'Permissions' => '1'
+        ], $this->defaultHeader);
+
+        $now = new \DateTime();
+        $r = $this->restClient->send('Locators', 'post', [], [
+            'AccessPolicyId' => $r->d->Id,
+            'AssetId' => $newAsset->getId(),
+            'StartTime' => $now->format('Y-m-d\TH:i:sP'),
+            'Type' => '2'
+        ], $this->defaultHeader);
+
+        return $newAsset;
+    }
+
+    public function createFileInfos(Asset $asset)
+    {
+        return $this->restClient->send('CreateFileInfos?assetid=' . '\'' . urlencode($asset->getId()) . '\'', 'get', [], [], $this->defaultHeader);
+    }
+
+    public function getLatestMediaProcessor($name)
+    {
+        $mediaProcessors = $this->restClient->send('MediaProcessors', 'get', [], [], $this->defaultHeader);
+        foreach($mediaProcessors->d->results as $mediaProcessor) {
+            if(strtolower($mediaProcessor->Name) === strtolower($name)) {
+                return $mediaProcessor;
+            }
+        }
     }
 }
