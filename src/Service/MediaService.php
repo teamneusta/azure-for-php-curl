@@ -26,7 +26,6 @@ namespace Bennsel\WindowsAzureCurl\Service;
 
 
 use Bennsel\WindowsAzureCurl\General\Constants;
-use Bennsel\WindowsAzureCurl\General\OAuthRestProxy;
 use Bennsel\WindowsAzureCurl\General\RestClient;
 use Bennsel\WindowsAzureCurl\Model\Media\Asset;
 use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
@@ -68,20 +67,7 @@ class MediaService implements ServiceInterface
 
     public function getAssetList()
     {
-        $skipping = 0;
-        $newArr = [];
-        $finish = false;
-        while (!$finish) {
-            $result = $this->restClient->send('Assets', 'get', ['$skip' => $skipping], [], $this->defaultHeader);
-            $skipping = $skipping + 1000;
-            if (empty($result)) {
-                $finish = true;
-            } else {
-                $newArr = array_merge($newArr, $result);
-            }
-        }
-
-        return $newArr;
+        return $this->getAll('Assets', 'get', [], [], $this->defaultHeader);;
     }
 
     public function getAssetByName($name)
@@ -136,16 +122,35 @@ class MediaService implements ServiceInterface
 
     public function getJobList()
     {
+        return $this->getAll('Jobs', 'get', [], [], $this->defaultHeader);
+    }
+
+    public function getJobListByState($state)
+    {
+        return $this->getAll('Jobs', 'get', [
+            '$filter' => 'State eq ' . $state
+        ], [], $this->defaultHeader);
+    }
+
+    protected function getAll(
+        $url,
+        $method,
+        array $parameters = [],
+        array $postParameters = [],
+        array $header = [],
+        $content = ''
+    )
+    {
         $skipping = 0;
         $newArr = [];
         $finish = false;
         while (!$finish) {
-            $obj = $this->restClient->send('Jobs', 'get', ['$skip' => $skipping], [], $this->defaultHeader);
-            $skipping = $skipping + 1000;
-            if (empty($obj->d->results)) {
+            $results = $this->restClient->send($url, $method, array_merge($parameters, ['$skip' => $skipping]), $postParameters, $header, $content);
+            $skipping = 1000 + $skipping;
+            if (empty($results)) {
                 $finish = true;
             } else {
-                $newArr = array_merge($newArr, $obj->d->results);
+                $newArr = array_merge($newArr, $results);
             }
         }
 

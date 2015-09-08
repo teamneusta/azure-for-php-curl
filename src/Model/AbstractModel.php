@@ -25,16 +25,10 @@
 namespace Bennsel\WindowsAzureCurl\Model;
 
 
+use Bennsel\WindowsAzureCurl\Filter\Edm;
+
 abstract class AbstractModel
 {
-    public function __construct(\stdClass $arguments)
-    {
-        foreach($arguments as $k => $value) {
-            $method = 'set' . $this->toCamelCase($k, true);
-            $this->$method($value);
-        }
-    }
-
     /**
      * Translates a string with underscores
      * into camel case (e.g. first_name -> firstName)
@@ -63,5 +57,21 @@ abstract class AbstractModel
         $arr = array_filter($arr);
         return $arr;
         return json_encode($arr);
+    }
+
+    /**
+     * fromArray
+     *
+     * @param array $options
+     * @return void
+     */
+    public function fromArray(array $options)
+    {
+        foreach ($options as $key => $value) {
+            $methodName = 'set' . ucfirst($key);
+            if (method_exists($this, $methodName)) {
+                $this->$methodName(Edm::filter($value));
+            }
+        }
     }
 }

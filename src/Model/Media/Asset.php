@@ -18,116 +18,67 @@ use Bennsel\WindowsAzureCurl\Model\AbstractModel;
 class Asset extends AbstractModel
 {
     /**
-     * The state of the asset "initialized"
-     *
-     * @var int
-     */
-    const STATE_INITIALIZED = 0;
-
-    /**
-     * The state of the asset "published"
-     *
-     * @var int
-     */
-    const STATE_PUBLISHED = 1;
-
-    /**
-     * The state of the asset "deleted"
-     *
-     * @var int
-     */
-    const STATE_DELETED = 2;
-
-    /**
-     * The encryption options "none"
-     *
-     * @var int
-     */
-    const OPTIONS_NONE = 0;
-
-    /**
-     * The encryption options "storage encrypted"
-     *
-     * @var int
-     */
-    const OPTIONS_STORAGE_ENCRYPTED = 1;
-
-    /**
-     * The encryption options "common encryption protected"
-     *
-     * @var int
-     */
-    const OPTIONS_COMMON_ENCRYPTION_PROTECTED = 2;
-
-    /**
-     * The encryption options "envelope encryption protected"
-     *
-     * @var int
-     */
-    const OPTIONS_ENVELOPE_ENCRYPTION_PROTECTED = 4;
-
-    /**
      * Asset id
      *
      * @var string
      */
-    private $_id;
+    private $id;
 
     /**
      * State
      *
      * @var int
      */
-    private $_state;
+    private $state;
 
     /**
      * Created
      *
      * @var \DateTime
      */
-    private $_created;
+    private $created;
 
     /**
      * Last modified
      *
      * @var \DateTime
      */
-    private $_lastModified;
+    private $lastModified;
 
     /**
      * Alternate id
      *
      * @var string
      */
-    private $_alternateId;
+    private $alternateId;
 
     /**
      * Name
      *
      * @var string
      */
-    private $_name;
+    private $name;
 
     /**
      * Options
      *
      * @var int
      */
-    private $_options;
+    private $options;
 
     /**
      * URI
      *
      * @var string
      */
-    private $_uri;
+    private $uri;
 
     /**
      * Storage account name
      *
      * @var string
      */
-    private $_storageAccountName;
+    private $storageAccountName;
 
     /**
      * Create asset from array
@@ -157,59 +108,13 @@ class Asset extends AbstractModel
     }
 
     /**
-     * Fill asset from array
-     *
-     * @param array $options Array containing values for object properties
-     *
-     * @return none
-     */
-    public function fromArray($options)
-    {
-        if (isset($options['Id'])) {
-            $this->_id = $options['Id'];
-        }
-
-        if (isset($options['State'])) {
-            $this->_state = $options['State'];
-        }
-
-        if (isset($options['Created'])) {
-            $this->_created = Edm::filter($options['Created']);
-        }
-
-        if (isset($options['LastModified'])) {
-            $this->_lastModified = Edm::filter($options['LastModified']);
-        }
-
-        if (isset($options['AlternateId'])) {
-            $this->_alternateId = $options['AlternateId'];
-        }
-
-        if (isset($options['Name'])) {
-            $this->_name = $options['Name'];
-        }
-
-        if (isset($options['Options'])) {
-            $this->_options = $options['Options'];
-        }
-
-        if (isset($options['Uri'])) {
-            $this->_uri = $options['Uri'];
-        }
-
-        if (isset($options['StorageAccountName'])) {
-            $this->_storageAccountName = $options['StorageAccountName'];
-        }
-    }
-
-    /**
      * Get "Storage account name"
      *
      * @return string
      */
     public function getStorageAccountName()
     {
-        return $this->_storageAccountName;
+        return $this->storageAccountName;
     }
 
     /**
@@ -219,7 +124,7 @@ class Asset extends AbstractModel
      */
     public function getUri()
     {
-        return $this->_uri;
+        return $this->uri;
     }
 
     /**
@@ -229,7 +134,7 @@ class Asset extends AbstractModel
      */
     public function getOptions()
     {
-        return $this->_options;
+        return $this->options;
     }
 
     /**
@@ -241,7 +146,7 @@ class Asset extends AbstractModel
      */
     public function setOptions($value)
     {
-        $this->_options = $value;
+        $this->options = $value;
     }
 
     /**
@@ -251,7 +156,7 @@ class Asset extends AbstractModel
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -263,7 +168,7 @@ class Asset extends AbstractModel
      */
     public function setName($value)
     {
-        $this->_name = $value;
+        $this->name = $value;
     }
 
     /**
@@ -273,7 +178,7 @@ class Asset extends AbstractModel
      */
     public function getAlternateId()
     {
-        return $this->_alternateId;
+        return $this->alternateId;
     }
 
     /**
@@ -285,7 +190,7 @@ class Asset extends AbstractModel
      */
     public function setAlternateId($value)
     {
-        $this->_alternateId = $value;
+        $this->alternateId = $value;
     }
 
     /**
@@ -295,7 +200,7 @@ class Asset extends AbstractModel
      */
     public function getLastModified()
     {
-        return $this->_lastModified;
+        return $this->lastModified;
     }
 
     /**
@@ -305,7 +210,7 @@ class Asset extends AbstractModel
      */
     public function getCreated()
     {
-        return $this->_created;
+        return $this->created;
     }
 
     /**
@@ -315,7 +220,7 @@ class Asset extends AbstractModel
      */
     public function getState()
     {
-        return $this->_state;
+        return $this->state;
     }
 
     /**
@@ -325,8 +230,6 @@ class Asset extends AbstractModel
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 }
-
-

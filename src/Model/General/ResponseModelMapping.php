@@ -8,7 +8,8 @@ namespace Bennsel\WindowsAzureCurl\Model\General;
 class ResponseModelMapping {
 
     protected static $mapping = [
-        'assets' => '\Bennsel\WindowsAzureCurl\Model\Media\Asset'
+        'assets' => '\Bennsel\WindowsAzureCurl\Model\Media\Asset',
+        'jobs' => '\Bennsel\WindowsAzureCurl\Model\Media\Job'
     ];
 
     /**
