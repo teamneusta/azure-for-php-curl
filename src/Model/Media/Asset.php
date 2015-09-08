@@ -1,5 +1,6 @@
 <?php
 namespace Bennsel\WindowsAzureCurl\Model\Media;
+use Bennsel\WindowsAzureCurl\Filter\Edm;
 use Bennsel\WindowsAzureCurl\Model\AbstractModel;
 
 
@@ -173,11 +174,11 @@ class Asset extends AbstractModel
         }
 
         if (isset($options['Created'])) {
-            //$this->_created = new \DateTime($options['Created']);
+            $this->_created = Edm::filter($options['Created']);
         }
 
         if (isset($options['LastModified'])) {
-            //$this->_lastModified = new \DateTime($options['LastModified']);
+            $this->_lastModified = Edm::filter($options['LastModified']);
         }
 
         if (isset($options['AlternateId'])) {

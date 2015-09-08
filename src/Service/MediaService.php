@@ -66,51 +66,41 @@ class MediaService implements ServiceInterface
         $this->defaultHeader['Accept'] = 'application/json;odata=verbose';
     }
 
-    public function getJobList()
-    {
-        $ret = $this->restClient->send('Jobs', 'get', [], [], $this->defaultHeader);
-    }
-
     public function getAssetList()
     {
         $skipping = 0;
         $newArr = [];
         $finish = false;
-        while(!$finish) {
-            $obj = $this->restClient->send('Assets', 'get', ['$skip' => $skipping], [], $this->defaultHeader);
+        while (!$finish) {
+            $result = $this->restClient->send('Assets', 'get', ['$skip' => $skipping], [], $this->defaultHeader);
             $skipping = $skipping + 1000;
-            if (empty($obj->d->results)) {
+            if (empty($result)) {
                 $finish = true;
             } else {
-                $newArr = array_merge($newArr, $obj->d->results);
+                $newArr = array_merge($newArr, $result);
             }
         }
 
         return $newArr;
     }
 
-    public function getAssetByName($name) {
+    public function getAssetByName($name)
+    {
         $obj = $this->restClient->send('Assets', 'get', [
             '$filter' => 'Name eq \'' . $name . '\''
         ], [], $this->defaultHeader);
-        return $obj->d->results;
+        return $obj;
     }
 
     public function deleteAsset($assetId)
     {
-        $obj = $this->restClient->send('Assets(\''.$assetId.'\')', 'delete', [], [], $this->defaultHeader);
+        $obj = $this->restClient->send('Assets(\'' . $assetId . '\')', 'delete', [], [], $this->defaultHeader);
         return $obj;
     }
 
     public function createAsset(Asset $asset)
     {
-        $r = $this->restClient->send('Assets', 'post', [], [], $this->defaultHeader, $asset);
-        $newAsset = new Asset(0);
-        $arr = [];
-        foreach($r->d as $k => $v) {
-            $arr[$k] = $v;
-        }
-        $newAsset->fromArray($arr);
+        $newAsset = $this->restClient->send('Assets', 'post', [], [], $this->defaultHeader, $asset);
 
         $r = $this->restClient->send('AccessPolicies', 'post', [], [
             'Name' => 'foo',
@@ -137,10 +127,28 @@ class MediaService implements ServiceInterface
     public function getLatestMediaProcessor($name)
     {
         $mediaProcessors = $this->restClient->send('MediaProcessors', 'get', [], [], $this->defaultHeader);
-        foreach($mediaProcessors->d->results as $mediaProcessor) {
-            if(strtolower($mediaProcessor->Name) === strtolower($name)) {
+        foreach ($mediaProcessors->d->results as $mediaProcessor) {
+            if (strtolower($mediaProcessor->Name) === strtolower($name)) {
                 return $mediaProcessor;
             }
         }
+    }
+
+    public function getJobList()
+    {
+        $skipping = 0;
+        $newArr = [];
+        $finish = false;
+        while (!$finish) {
+            $obj = $this->restClient->send('Jobs', 'get', ['$skip' => $skipping], [], $this->defaultHeader);
+            $skipping = $skipping + 1000;
+            if (empty($obj->d->results)) {
+                $finish = true;
+            } else {
+                $newArr = array_merge($newArr, $obj->d->results);
+            }
+        }
+
+        return $newArr;
     }
 }

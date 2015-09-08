@@ -7,6 +7,7 @@
 namespace Bennsel\WindowsAzureCurl\General;
 
 
+use Bennsel\WindowsAzureCurl\Model\General\ResponseModelMapping;
 use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
 use Curl\Curl;
 
@@ -58,9 +59,9 @@ class RestClient
 
         if($curl->http_status_code == 301) {
             $this->url = $curl->response_headers['Location'];
-            $r = $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
+            return $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
         }
 
-        return $r;
+        return ResponseModelMapping::create($url, $r);
     }
 }
