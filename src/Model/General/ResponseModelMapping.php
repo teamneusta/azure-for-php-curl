@@ -24,6 +24,7 @@ class ResponseModelMapping {
         if(!empty(self::$mapping[strtolower($type)])) {
             $json = json_encode($response);
             $array = json_decode($json, TRUE);
+            $results = [];
             if (!empty($array['d']['results'])) {
                 $results = $array['d']['results'];
             }

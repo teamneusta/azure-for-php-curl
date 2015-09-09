@@ -35,7 +35,6 @@ class MediaAuthorization {
 
         $date = gmdate("D, d M Y H:i:s") . ' GMT';
         $this->canonicalizedHeaders['x-ms-date'] = $date;
-        $this->canonicalizedHeaders['x-ms-version'] = $this->msVersion;
     }
 
     /**
