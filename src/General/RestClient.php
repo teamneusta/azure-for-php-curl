@@ -17,11 +17,19 @@ class RestClient
     protected $authorization;
     protected $settings;
 
-    public function __construct($url, SettingsInterface $settings, $authorization = '')
+    /**
+     * curl
+     *
+     * @var Curl
+     */
+    protected $curl;
+
+    public function __construct($url, SettingsInterface $settings, $authorization = '', Curl $curlObject = null)
     {
         $this->url = $url;
         $this->authorization = $authorization;
         $this->settings = $settings;
+        $this->curl = $curlObject ?: new Curl();
     }
 
     public function send(
@@ -33,9 +41,8 @@ class RestClient
         $content = ''
     )
     {
-        $curl = new Curl();
-        $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
-        $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
+        $this->curl->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $this->curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
 
         $method = strtolower($method);
         $finalUrl = strpos($url, '//') !== false ? $url : $this->url . $url;
@@ -51,14 +58,14 @@ class RestClient
         }
 
         foreach($header as $key => $value) {
-            $curl->setHeader($key, $value);
+            $this->curl->setHeader($key, $value);
         }
 
         $orgHeader = $header;
-        $r = $curl->$method($finalUrl, $parameters ?: $postParameters);
+        $r = $this->curl->$method($finalUrl, $parameters ?: $postParameters);
 
-        if($curl->http_status_code == 301) {
-            $this->url = $curl->response_headers['Location'];
+        if($this->curl->http_status_code == 301) {
+            $this->url = $this->curl->response_headers['Location'];
             return $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
         }
 

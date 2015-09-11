@@ -42,6 +42,12 @@ class ServiceBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bennsel\WindowsAzureCurl\Service\MediaService', $mediaService);
     }
 
+    public function testShouldReturnBlobServiceClass()
+    {
+        $blobService = ServiceBuilder::create('BlobService', $this->settings);
+        $this->assertInstanceOf('Bennsel\WindowsAzureCurl\Service\BlobService', $blobService);
+    }
+
     public function testShouldReturnMediaServiceThatIncludeServiceInterface()
     {
         $mediaService = ServiceBuilder::create('MediaService', $this->settings);
