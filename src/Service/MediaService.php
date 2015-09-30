@@ -28,6 +28,7 @@ namespace Bennsel\WindowsAzureCurl\Service;
 use Bennsel\WindowsAzureCurl\General\Constants;
 use Bennsel\WindowsAzureCurl\General\RestClient;
 use Bennsel\WindowsAzureCurl\Model\Media\Asset;
+use Bennsel\WindowsAzureCurl\Model\Media\Job;
 use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
 class MediaService implements ServiceInterface
@@ -123,6 +124,11 @@ class MediaService implements ServiceInterface
     public function getJobList()
     {
         return $this->getAll('Jobs', 'get', [], [], $this->defaultHeader);
+    }
+
+    public function getJobOutputMediaAssets(Job $job)
+    {
+        return $this->restClient->send('Jobs(\'' . $job->getId() .'\')/OutputMediaAssets', 'get', [], [], $this->defaultHeader);
     }
 
     public function getJobListByState($state)

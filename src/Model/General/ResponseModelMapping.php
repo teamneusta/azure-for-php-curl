@@ -8,8 +8,9 @@ namespace Bennsel\WindowsAzureCurl\Model\General;
 class ResponseModelMapping {
 
     protected static $mapping = [
-        'assets' => '\Bennsel\WindowsAzureCurl\Model\Media\Asset',
-        'jobs' => '\Bennsel\WindowsAzureCurl\Model\Media\Job'
+        '/^Assets$/i' => '\Bennsel\WindowsAzureCurl\Model\Media\Asset',
+        '/^Jobs$/i' => '\Bennsel\WindowsAzureCurl\Model\Media\Job',
+        '/^Jobs\(.*\)\/OutputMediaAssets/i' => '\Bennsel\WindowsAzureCurl\Model\Media\Asset'
     ];
 
     /**
@@ -21,7 +22,16 @@ class ResponseModelMapping {
      */
     public static function create($type, $response)
     {
-        if(!empty(self::$mapping[strtolower($type)])) {
+        $className = '';
+        if(!empty($type)) {
+            foreach(self::$mapping as $key => $class) {
+                if(preg_match($key, $type) > 0) {
+                    $className = $class;
+                }
+            }
+        }
+
+        if(!empty($className)) {
             $json = json_encode($response);
             $array = json_decode($json, TRUE);
             $results = [];
@@ -33,7 +43,7 @@ class ResponseModelMapping {
 
             if(count($results)) {
                 foreach($results as $entry) {
-                    $objectClassName = self::$mapping[strtolower($type)];
+                    $objectClassName = $className;
                     $newObject = $objectClassName::createFromOptions($entry);
                     $finalArray[] = $newObject;
                 }

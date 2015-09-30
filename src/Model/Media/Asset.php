@@ -25,6 +25,54 @@ class Asset extends AbstractModel
     private $id;
 
     /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param int $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @param \DateTime $lastModified
+     */
+    public function setLastModified($lastModified)
+    {
+        $this->lastModified = $lastModified;
+    }
+
+    /**
+     * @param string $uri
+     */
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
+    }
+
+    /**
+     * @param string $storageAccountName
+     */
+    public function setStorageAccountName($storageAccountName)
+    {
+        $this->storageAccountName = $storageAccountName;
+    }
+
+    /**
      * State
      *
      * @var int
