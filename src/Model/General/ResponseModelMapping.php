@@ -10,6 +10,7 @@ class ResponseModelMapping {
     protected static $mapping = [
         '/^Assets$/i' => '\Bennsel\WindowsAzureCurl\Model\Media\Asset',
         '/^Jobs$/i' => '\Bennsel\WindowsAzureCurl\Model\Media\Job',
+        '/^Files/i' => '\Bennsel\WindowsAzureCurl\Model\Media\File',
         '/^Jobs\(.*\)\/OutputMediaAssets/i' => '\Bennsel\WindowsAzureCurl\Model\Media\Asset'
     ];
 

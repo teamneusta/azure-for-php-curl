@@ -79,6 +79,14 @@ class MediaService implements ServiceInterface
         return $obj;
     }
 
+    public function getFilesByFilter($filter)
+    {
+        $obj = $this->getAll('Files', 'get', [
+            '$filter' => $filter
+        ], [], $this->defaultHeader);
+        return $obj;
+    }
+
     public function deleteAsset($assetId)
     {
         $obj = $this->restClient->send('Assets(\'' . $assetId . '\')', 'delete', [], [], $this->defaultHeader);
