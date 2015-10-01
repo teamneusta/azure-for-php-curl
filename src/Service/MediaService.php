@@ -30,6 +30,7 @@ use Bennsel\WindowsAzureCurl\General\RestClient;
 use Bennsel\WindowsAzureCurl\Model\Media\Asset;
 use Bennsel\WindowsAzureCurl\Model\Media\Job;
 use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TYPO3\CMS\Core\FormProtection\Exception;
 
 class MediaService implements ServiceInterface
 {
@@ -139,10 +140,15 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Jobs(\'' . $job->getId() .'\')/OutputMediaAssets', 'get', [], [], $this->defaultHeader);
     }
 
-    public function getJobListByState($state)
+    public function getJobListByState($state, $filter = null)
+    {
+        return $this->getJobListByFilter('State eq ' . $state . ($filter ? ' and ' . $filter : ''));
+    }
+
+    public function getJobListByFilter($filter)
     {
         return $this->getAll('Jobs', 'get', [
-            '$filter' => 'State eq ' . $state
+            '$filter' => $filter
         ], [], $this->defaultHeader);
     }
 
