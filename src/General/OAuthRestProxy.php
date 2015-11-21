@@ -22,7 +22,7 @@
  * @link      https://github.com/windowsazure/azure-sdk-for-php
  */
 
-namespace Bennsel\WindowsAzureCurl\General;
+namespace TeamNeusta\WindowsAzureCurl\General;
 
 class OAuthRestProxy extends RestClient
 {

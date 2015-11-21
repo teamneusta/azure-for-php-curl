@@ -1,13 +1,13 @@
 <?php
 
-namespace Bennsel\WindowsAzureCurl\Tests\General\ServiceBuilder;
+namespace TeamNeusta\WindowsAzureCurl\Tests\General\ServiceBuilder;
 
 
-use Bennsel\WindowsAzureCurl\General\RestClient;
-use Bennsel\WindowsAzureCurl\General\ServiceBuilder;
-use Bennsel\WindowsAzureCurl\Service\Settings\MediaServiceSettings;
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
-use Bennsel\WindowsAzureCurl\TestSettings;
+use TeamNeusta\WindowsAzureCurl\General\RestClient;
+use TeamNeusta\WindowsAzureCurl\General\ServiceBuilder;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\MediaServiceSettings;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TeamNeusta\WindowsAzureCurl\TestSettings;
 use Prophecy\Argument;
 
 class RestClientTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +45,7 @@ class RestClientTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->settingsProphecy = $this->prophesize('\\Bennsel\\WindowsAzureCurl\\Service\\Settings\\SettingsInterface');
+        $this->settingsProphecy = $this->prophesize('\\TeamNeusta\\WindowsAzureCurl\\Service\\Settings\\SettingsInterface');
         $this->curlProphecy = $this->prophesize('\\Curl\\Curl');
     }
 

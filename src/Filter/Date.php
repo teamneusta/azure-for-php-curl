@@ -3,7 +3,7 @@
  *  (c) 2015 Benjamin Kluge <b.kluge@neusta.de>, NEUSTA GmbH
  *  All rights reserved
  ***************************************************************/
-namespace Bennsel\WindowsAzureCurl\Filter;
+namespace TeamNeusta\WindowsAzureCurl\Filter;
 
 class Date {
     public static function filter($date)

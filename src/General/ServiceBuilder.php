@@ -1,14 +1,14 @@
 <?php
 
-namespace Bennsel\WindowsAzureCurl\General;
+namespace TeamNeusta\WindowsAzureCurl\General;
 
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
 class ServiceBuilder
 {
     public static function create($serviceName, SettingsInterface $settings)
     {
-        $className = 'Bennsel\\WindowsAzureCurl\\Service\\' . $serviceName;
+        $className = 'TeamNeusta\\WindowsAzureCurl\\Service\\' . $serviceName;
         if (class_exists($className) === true) {
             return new $className($settings);
         } else {

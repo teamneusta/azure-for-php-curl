@@ -1,12 +1,12 @@
 <?php
 
-namespace Bennsel\WindowsAzureCurl\General;
+namespace TeamNeusta\WindowsAzureCurl\General;
 
 class ModelBuilder
 {
     public static function create($modelName, $arguments)
     {
-        $className = 'Bennsel\\WindowsAzureCurl\\Model\\' . $modelName;
+        $className = 'TeamNeusta\\WindowsAzureCurl\\Model\\' . $modelName;
         if (class_exists($className) === true) {
             return new $className($arguments);
         } else {

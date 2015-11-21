@@ -1,6 +1,6 @@
 <?php
 
-namespace Bennsel\WindowsAzureCurl\Service\Settings;
+namespace TeamNeusta\WindowsAzureCurl\Service\Settings;
 
 
 class MediaServiceSettings extends SettingsAbstract

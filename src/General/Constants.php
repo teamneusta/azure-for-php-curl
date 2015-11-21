@@ -2,7 +2,7 @@
 /***************************************************************
  *  (c) 2015 Benjamin Kluge <b.kluge@neusta.de>
  ***************************************************************/
-namespace Bennsel\WindowsAzureCurl\General;
+namespace TeamNeusta\WindowsAzureCurl\General;
 
 class Constants {
     const OAUTH_GRANT_TYPE = 'grant_type';

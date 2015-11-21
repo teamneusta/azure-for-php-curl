@@ -1,8 +1,8 @@
 <?php
-namespace Bennsel\WindowsAzureCurl\Service;
+namespace TeamNeusta\WindowsAzureCurl\Service;
 
 
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
 interface ServiceInterface
 {

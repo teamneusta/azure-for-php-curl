@@ -1,9 +1,9 @@
 <?php
-namespace Bennsel\WindowsAzureCurl\Service\Authorization;
+namespace TeamNeusta\WindowsAzureCurl\Service\Authorization;
 
-use Bennsel\WindowsAzureCurl\General\Constants;
-use Bennsel\WindowsAzureCurl\General\RestClient;
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TeamNeusta\WindowsAzureCurl\General\Constants;
+use TeamNeusta\WindowsAzureCurl\General\RestClient;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
 /***************************************************************
  *  (c) 2015 Benjamin Kluge <b.kluge@neusta.de>, NEUSTA GmbH

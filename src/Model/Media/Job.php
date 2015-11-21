@@ -1,8 +1,8 @@
 <?php
-namespace Bennsel\WindowsAzureCurl\Model\Media;
-use Bennsel\WindowsAzureCurl\Filter\Edm;
-use Bennsel\WindowsAzureCurl\Model\AbstractModel;
-use Bennsel\WindowsAzureCurl\Model\General\ModelInterface;
+namespace TeamNeusta\WindowsAzureCurl\Model\Media;
+use TeamNeusta\WindowsAzureCurl\Filter\Edm;
+use TeamNeusta\WindowsAzureCurl\Model\AbstractModel;
+use TeamNeusta\WindowsAzureCurl\Model\General\ModelInterface;
 
 
 class Job extends AbstractModel implements ModelInterface

@@ -1,12 +1,12 @@
 <?php
 
-namespace Bennsel\WindowsAzureCurl\Tests\General\ServiceBuilder;
+namespace TeamNeusta\WindowsAzureCurl\Tests\General\ServiceBuilder;
 
 
-use Bennsel\WindowsAzureCurl\General\ServiceBuilder;
-use Bennsel\WindowsAzureCurl\Service\Settings\MediaServiceSettings;
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
-use Bennsel\WindowsAzureCurl\TestSettings;
+use TeamNeusta\WindowsAzureCurl\General\ServiceBuilder;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\MediaServiceSettings;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TeamNeusta\WindowsAzureCurl\TestSettings;
 
 class ServiceBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,19 +39,19 @@ class ServiceBuilderTest extends \PHPUnit_Framework_TestCase
     public function testShouldReturnMediaServiceClass()
     {
         $mediaService = ServiceBuilder::create('MediaService', $this->settings);
-        $this->assertInstanceOf('Bennsel\WindowsAzureCurl\Service\MediaService', $mediaService);
+        $this->assertInstanceOf('TeamNeusta\WindowsAzureCurl\Service\MediaService', $mediaService);
     }
 
     public function testShouldReturnBlobServiceClass()
     {
         $blobService = ServiceBuilder::create('BlobService', $this->settings);
-        $this->assertInstanceOf('Bennsel\WindowsAzureCurl\Service\BlobService', $blobService);
+        $this->assertInstanceOf('TeamNeusta\WindowsAzureCurl\Service\BlobService', $blobService);
     }
 
     public function testShouldReturnMediaServiceThatIncludeServiceInterface()
     {
         $mediaService = ServiceBuilder::create('MediaService', $this->settings);
-        $this->assertInstanceOf('Bennsel\WindowsAzureCurl\Service\ServiceInterface', $mediaService);
+        $this->assertInstanceOf('TeamNeusta\WindowsAzureCurl\Service\ServiceInterface', $mediaService);
     }
 
 

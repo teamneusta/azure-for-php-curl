@@ -1,7 +1,7 @@
 <?php
-namespace Bennsel\WindowsAzureCurl\Service\Authorization;
+namespace TeamNeusta\WindowsAzureCurl\Service\Authorization;
 
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
 /***************************************************************
  *  (c) 2015 Benjamin Kluge <b.kluge@neusta.de>, NEUSTA GmbH

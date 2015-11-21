@@ -4,11 +4,11 @@
  *  All rights reserved
  ***************************************************************/
 
-namespace Bennsel\WindowsAzureCurl\General;
+namespace TeamNeusta\WindowsAzureCurl\General;
 
 
-use Bennsel\WindowsAzureCurl\Model\General\ResponseModelMapping;
-use Bennsel\WindowsAzureCurl\Service\Settings\SettingsInterface;
+use TeamNeusta\WindowsAzureCurl\Model\General\ResponseModelMapping;
+use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 use Curl\Curl;
 
 class RestClient
@@ -48,7 +48,7 @@ class RestClient
         $finalUrl = strpos($url, '//') !== false ? $url : $this->url . $url;
 
         if(!empty($this->authorization) && empty($header['Authorization'])) {
-            $authClass = 'Bennsel\\WindowsAzureCurl\\Service\\Authorization\\'.$this->authorization;
+            $authClass = 'TeamNeusta\\WindowsAzureCurl\\Service\\Authorization\\'.$this->authorization;
             $class = new $authClass($this->settings);
             $header['Authorization'] = $class->getAuthorizationString($url, $method, $parameters, $header);
         }

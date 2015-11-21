@@ -3,9 +3,9 @@
  *  (c) 2015 Benjamin Kluge <b.kluge@neusta.de>, NEUSTA GmbH
  *  All rights reserved
  ***************************************************************/
-namespace Bennsel\WindowsAzureCurl\Model\General;
+namespace TeamNeusta\WindowsAzureCurl\Model\General;
 
-use Bennsel\WindowsAzureCurl\Model\Media\Asset;
+use TeamNeusta\WindowsAzureCurl\Model\Media\Asset;
 
 interface ModelInterface
 {
