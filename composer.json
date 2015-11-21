@@ -1,5 +1,5 @@
 {
-  "name": "bennsel/windowsazurecurl",
+  "name": "teamneusta/windowsazurecurl",
   "description": "This project provides a set of PHP client libraries that make it easy to access Windows Azure with curl",
   "keywords": [ "php", "azure", "sdk", "curl" ],
   "license": "Apache-2.0",
