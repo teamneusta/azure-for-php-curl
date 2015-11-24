@@ -19,7 +19,7 @@
     "php": ">=5.4",
     "ext-curl": "*",
     "php-curl-class/php-curl-class": "^3.5",
-    "guzzlehttp/guzzle": "^6.1"
+    "guzzlehttp/guzzle": "^4.2"
   },
 
   "require-dev": {

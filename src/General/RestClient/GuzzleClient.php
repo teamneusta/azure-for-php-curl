@@ -54,14 +54,16 @@ class GuzzleClient {
 
         $orgHeader = $header;
 
-        $r = $this->guzzle->request($method, $finalUrl, array_merge(array_filter([
+        $r = $this->guzzle->createRequest($method, $finalUrl, array_merge(array_filter([
             'headers' => $header,
             'query' => $parameters,
-            'form_params' => $postParameters
+            'body' => $postParameters
         ]), ['allow_redirects' => false]));
+        $r = $this->guzzle->send($r);
 
         if($r->getStatusCode() == 301) {
-            $this->url = current($r->getHeader('Location'));
+            $location = $r->getHeader('Location');
+            $this->url = is_array($location) ? current($location) : $location;
             return $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
         }
 
