@@ -52,8 +52,7 @@ class BlobService implements ServiceInterface
         $destinationContainer,
         $destinationBlob,
         $sourceContainer,
-        $sourceBlob,
-        $options = null
+        $sourceBlob
     ) {
         $header = [];
 

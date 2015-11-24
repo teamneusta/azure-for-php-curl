@@ -7,29 +7,30 @@
 namespace TeamNeusta\WindowsAzureCurl\General;
 
 
+use TeamNeusta\WindowsAzureCurl\General\RestClient\GuzzleClient;
 use TeamNeusta\WindowsAzureCurl\Model\General\ResponseModelMapping;
 use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 use Curl\Curl;
+use TeamNeusta\WindowsAzureCurl\General\RestClient\CurlClient;
 
 class RestClient
 {
-    protected $url;
-    protected $authorization;
-    protected $settings;
 
     /**
-     * curl
+     * restClient
      *
-     * @var Curl
+     * @var CurlClient
      */
-    protected $curl;
+    protected $restClient;
 
-    public function __construct($url, SettingsInterface $settings, $authorization = '', Curl $curlObject = null)
+    public function __construct($url, SettingsInterface $settings, $authorization = '', $curlObject = null)
     {
-        $this->url = $url;
-        $this->authorization = $authorization;
-        $this->settings = $settings;
-        $this->curl = $curlObject ?: new Curl();
+        $class = '\\TeamNeusta\\WindowsAzureCurl\\General\\RestClient\\'.$settings->getHttpClient();
+        if(class_exists($class)) {
+            $this->restClient = new $class($url, $settings, $authorization, $curlObject);
+        } else {
+            throw new \Exception('HttpClient '.$class.' Class not Found');
+        }
     }
 
     public function send(
@@ -41,34 +42,6 @@ class RestClient
         $content = ''
     )
     {
-        $this->curl->setOpt(CURLOPT_RETURNTRANSFER, true);
-        $this->curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
-
-        $method = strtolower($method);
-        $finalUrl = strpos($url, '//') !== false ? $url : $this->url . $url;
-
-        if(!empty($this->authorization) && empty($header['Authorization'])) {
-            $authClass = 'TeamNeusta\\WindowsAzureCurl\\Service\\Authorization\\'.$this->authorization;
-            $class = new $authClass($this->settings);
-            $header['Authorization'] = $class->getAuthorizationString($url, $method, $parameters, $header);
-        }
-
-        if ($content && is_object($content) && method_exists($content, 'toArray')) {
-            $parameters = $content->toArray();
-        }
-
-        foreach($header as $key => $value) {
-            $this->curl->setHeader($key, $value);
-        }
-
-        $orgHeader = $header;
-        $r = $this->curl->$method($finalUrl, $parameters ?: $postParameters);
-
-        if($this->curl->http_status_code == 301) {
-            $this->url = $this->curl->response_headers['Location'];
-            return $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
-        }
-
-        return ResponseModelMapping::create($url, $r);
+        return $this->restClient->send($url, $method, $parameters, $postParameters, $header, $content);
     }
 }

@@ -57,7 +57,9 @@ class MediaAuthorization {
             ]
         );
 
-        return 'Bearer ' . $result->access_token;
+        $token = is_array($result) ? $result['access_token'] : $result->access_token;
+
+        return 'Bearer ' . $token;
     }
 
 }
