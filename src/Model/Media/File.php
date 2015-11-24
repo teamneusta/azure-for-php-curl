@@ -338,21 +338,6 @@ class File extends AbstractModel implements ModelInterface
     {
         $this->options = $options;
     }
-
-    /**
-     * Create asset from array
-     *
-     * @param array $options Array containing values for object properties
-     *
-     * @return Asset
-     */
-    public static function createFromOptions($options)
-    {
-        $file = new File();
-        $file->fromArray($options);
-
-        return $file;
-    }
 }
 
 

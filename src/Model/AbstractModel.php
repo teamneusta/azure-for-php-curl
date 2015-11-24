@@ -32,12 +32,28 @@ abstract class AbstractModel
         $arr = [];
         foreach($methods as $methodName) {
             if(strpos($methodName, 'get') !== false) {
-                $arr[substr($methodName, 3)] = $this->{$methodName}();
+                $value = $this->{$methodName}();
+                if(is_object($value) && method_exists($value, 'toArray')) {
+                    $arr[substr($methodName, 3)] = $value->toArray();
+                } else if(is_array($value)) {
+                    $collection = [];
+                    foreach($value as $val) {
+                        if(is_object($val) && method_exists($val, 'toArray')) {
+                            $collection[] = $val->toArray();
+                        } else {
+                            $collection[] = $val;
+                        }
+                    }
+                    $arr[substr($methodName, 3)] = $collection;
+                } else if($value instanceof \DateTime) {
+                    $arr[substr($methodName, 3)] = $value->format('c');
+                } else {
+                    $arr[substr($methodName, 3)] = $value;
+                }
             }
         }
         $arr = array_filter($arr);
         return $arr;
-        return json_encode($arr);
     }
 
     /**
@@ -53,6 +69,29 @@ abstract class AbstractModel
             if (method_exists($this, $methodName)) {
                 $this->$methodName(Edm::filter($value));
             }
+            $methodName = 'add' . ucfirst($key);
+            if (method_exists($this, $methodName)) {
+                if(!empty($value['results'])) {
+                    foreach($value['results'] as $result) {
+                        $this->$methodName($result);
+                    }
+                }
+            }
         }
+    }
+
+    /**
+     * createFromOptions
+     *
+     * @param $options
+     * @return static
+     */
+    public static function createFromOptions($options)
+    {
+        $class = static::class;
+        $obj = new $class();
+        $obj->fromArray($options);
+
+        return $obj;
     }
 }
