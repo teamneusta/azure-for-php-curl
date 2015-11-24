@@ -70,6 +70,32 @@ class Channel extends AbstractModel implements ModelInterface
      * @var Encoding
      */
     protected $encoding;
+    /**
+     * preview
+     *
+     * @var ChannelPreview
+     */
+    protected $preview;
+
+    /**
+     * @return ChannelPreview
+     */
+    public function getPreview()
+    {
+        return $this->preview;
+    }
+
+    /**
+     * @param ChannelPreview $preview
+     */
+    public function setPreview($preview)
+    {
+        if(is_array($preview)) {
+            $this->preview = ChannelPreview::createFromOptions($preview);
+        } else {
+            $this->preview = $preview;
+        }
+    }
 
     /**
      * @return Encoding
