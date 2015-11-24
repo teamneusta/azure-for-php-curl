@@ -170,6 +170,26 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Channels(\''.$channel->getId().'\')/Stop', 'post', [], [], $header, []);
     }
 
+    public function resetChannel(Channel $channel) {
+
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Channels(\''.$channel->getId().'\')/Reset', 'post', [], [], $header, []);
+    }
+
+    public function deleteChannel(Channel $channel) {
+
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Channels(\''.$channel->getId().'\')', 'delete', [], [], $header, []);
+    }
+
     public function listChannels()
     {
         return $this->restClient->send('Channels', 'get', [], [], $this->defaultHeader, '');
