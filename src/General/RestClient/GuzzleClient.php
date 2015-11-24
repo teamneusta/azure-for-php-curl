@@ -57,7 +57,8 @@ class GuzzleClient {
         $r = $this->guzzle->createRequest($method, $finalUrl, array_merge(array_filter([
             'headers' => $header,
             'query' => $parameters,
-            'body' => $postParameters
+            'body' => $postParameters,
+            'json' => $content ? array_filter($content) : false
         ]), ['allow_redirects' => false]));
         $r = $this->guzzle->send($r);
 

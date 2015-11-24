@@ -23,21 +23,6 @@ class Job extends AbstractModel implements ModelInterface
     private $jobNotificationSubscriptions;
 
     /**
-     * Create asset from array
-     *
-     * @param array $options Array containing values for object properties
-     *
-     * @return Asset
-     */
-    public static function createFromOptions($options)
-    {
-        $job = new Job();
-        $job->fromArray($options);
-
-        return $job;
-    }
-
-    /**
      * @return mixed
      */
     public function getId()

@@ -10,6 +10,7 @@ namespace TeamNeusta\WindowsAzureCurl\Service;
 use TeamNeusta\WindowsAzureCurl\General\Constants;
 use TeamNeusta\WindowsAzureCurl\General\RestClient;
 use TeamNeusta\WindowsAzureCurl\Model\Media\Asset;
+use TeamNeusta\WindowsAzureCurl\Model\Media\Channel;
 use TeamNeusta\WindowsAzureCurl\Model\Media\Job;
 use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
@@ -137,6 +138,21 @@ class MediaService implements ServiceInterface
         return $this->getAll('Jobs', 'get', [
             '$filter' => $filter
         ], [], $this->defaultHeader);
+    }
+
+    public function createChannel(Channel $channel)
+    {
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Channels', 'post', [], [], $header, $channel->toArray());
+    }
+
+    public function listChannels()
+    {
+        return $this->restClient->send('Channels', 'get', [], [], $this->defaultHeader, '');
     }
 
     protected function getAll(

@@ -129,21 +129,6 @@ class Asset extends AbstractModel
     private $storageAccountName;
 
     /**
-     * Create asset from array
-     *
-     * @param array $options Array containing values for object properties
-     *
-     * @return Asset
-     */
-    public static function createFromOptions($options)
-    {
-        $asset = new Asset($options['Options']);
-        $asset->fromArray($options);
-
-        return $asset;
-    }
-
-    /**
      * Create asset
      *
      * @param int $options Asset encrytion options.
