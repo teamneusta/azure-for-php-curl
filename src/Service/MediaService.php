@@ -150,6 +150,16 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Channels', 'post', [], [], $header, $channel->toArray());
     }
 
+    public function startChannel(Channel $channel) {
+
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Channels(\''.$channel->getId().'\')/Start', 'post', [], [], $header, []);
+    }
+
     public function listChannels()
     {
         return $this->restClient->send('Channels', 'get', [], [], $this->defaultHeader, '');

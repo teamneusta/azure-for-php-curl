@@ -54,12 +54,18 @@ class GuzzleClient {
 
         $orgHeader = $header;
 
-        $r = $this->guzzle->createRequest($method, $finalUrl, array_merge(array_filter([
+        $options = array_merge(array_filter([
             'headers' => $header,
             'query' => $parameters,
             'body' => $postParameters,
             'json' => $content ? array_filter($content) : false
-        ]), ['allow_redirects' => false]));
+        ]), ['allow_redirects' => false]);
+
+        if(strtolower($method) === 'post' && empty($options['body']) && empty($options['json'])) {
+            $options['body'] = '';
+        }
+
+        $r = $this->guzzle->createRequest($method, $finalUrl, $options);
         $r = $this->guzzle->send($r);
 
         if($r->getStatusCode() == 301) {
@@ -68,14 +74,18 @@ class GuzzleClient {
             return $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
         }
 
-        $content = $r->getBody()->getContents();
-        $array = json_decode($content, true);
-        if(json_last_error() !== JSON_ERROR_NONE) {
-            $xml = simplexml_load_string($content);
-            $json = json_encode($xml);
-            $array = json_decode($json,TRUE);
-        }
+        if($r->getBody()) {
+            $content = $r->getBody()->getContents();
+            $array = json_decode($content, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $xml = simplexml_load_string($content);
+                $json = json_encode($xml);
+                $array = json_decode($json, TRUE);
+            }
 
-        return ResponseModelMapping::create($url, $array);
+            return ResponseModelMapping::create($url, $array);
+        } else {
+            return $r->getStatusCode();
+        }
     }
 }
