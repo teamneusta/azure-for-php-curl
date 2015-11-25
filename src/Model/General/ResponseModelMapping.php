@@ -39,6 +39,8 @@ class ResponseModelMapping {
             $array = json_decode($json, TRUE);
             if(!empty($array['odata.metadata']) || !empty($array['Id'])) {
                 return $className::createFromOptions($array);
+            } else if(!empty($array['d']['__metadata'])) {
+                return $className::createFromOptions($array['d']);
             } else {
                 $results = [];
                 if (!empty($array['d']['results'])) {

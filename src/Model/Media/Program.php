@@ -237,4 +237,14 @@ class Program extends AbstractModel
     {
         $this->channelId = $channelId;
     }
+
+    public function setChannel(Channel $channel)
+    {
+        $this->setChannelId($channel->getId());
+    }
+
+    public function setAsset(Asset $asset)
+    {
+        $this->setAssetId($asset->getId());
+    }
 }

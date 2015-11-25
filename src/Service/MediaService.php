@@ -12,6 +12,7 @@ use TeamNeusta\WindowsAzureCurl\General\RestClient;
 use TeamNeusta\WindowsAzureCurl\Model\Media\Asset;
 use TeamNeusta\WindowsAzureCurl\Model\Media\Channel;
 use TeamNeusta\WindowsAzureCurl\Model\Media\Job;
+use TeamNeusta\WindowsAzureCurl\Model\Media\Program;
 use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
 
 class MediaService implements ServiceInterface
@@ -78,22 +79,7 @@ class MediaService implements ServiceInterface
 
     public function createAsset(Asset $asset)
     {
-        $newAsset = $this->restClient->send('Assets', 'post', [], [], $this->defaultHeader, $asset);
-
-        $r = $this->restClient->send('AccessPolicies', 'post', [], [
-            'Name' => 'foo',
-            'DurationInMinutes' => 1000,
-            'Permissions' => '1'
-        ], $this->defaultHeader);
-
-        $now = new \DateTime();
-        $r = $this->restClient->send('Locators', 'post', [], [
-            'AccessPolicyId' => $r->d->Id,
-            'AssetId' => $newAsset->getId(),
-            'StartTime' => $now->format('Y-m-d\TH:i:sP'),
-            'Type' => '2'
-        ], $this->defaultHeader);
-
+        $newAsset = $this->restClient->send('Assets', 'post', [], [], $this->defaultHeader, $asset->toArray());
         return $newAsset;
     }
 
@@ -193,6 +179,26 @@ class MediaService implements ServiceInterface
     public function listChannels()
     {
         return $this->restClient->send('Channels', 'get', [], [], $this->defaultHeader, '');
+    }
+
+    public function createProgram(Program $program)
+    {
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Programs', 'post', [], [], $header, $program->toArray());
+    }
+
+    public function startProgram(Program $program)
+    {
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Programs(\''.$program->getId().'\')/Start', 'post', [], [], $header);
     }
 
     protected function getAll(

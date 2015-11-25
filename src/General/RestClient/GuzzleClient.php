@@ -82,7 +82,6 @@ class GuzzleClient {
                 $json = json_encode($xml);
                 $array = json_decode($json, TRUE);
             }
-
             return ResponseModelMapping::create($url, $array);
         } else {
             return $r->getStatusCode();

@@ -89,7 +89,7 @@ abstract class AbstractModel
     public static function createFromOptions($options)
     {
         $class = static::class;
-        $obj = new $class();
+        $obj = new $class(0);
         $obj->fromArray($options);
 
         return $obj;
