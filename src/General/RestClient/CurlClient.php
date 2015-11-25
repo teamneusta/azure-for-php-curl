@@ -21,6 +21,13 @@ class CurlClient {
      */
     protected $curl;
 
+    /**
+     * lastHeader
+     *
+     * @var array
+     */
+    protected $lastHeader = [];
+
     public function __construct($url, SettingsInterface $settings, $authorization = '', Curl $curlObject = null)
     {
         $this->url = $url;
@@ -35,9 +42,14 @@ class CurlClient {
         array $parameters = [],
         array $postParameters = [],
         array $header = [],
-        $content = ''
+        $content = '',
+        $analyzedRecursiv = true
     )
     {
+        if(empty($header) && !empty($this->lastHeader)) {
+            $header = $this->lastHeader;
+        }
+
         $this->curl->setOpt(CURLOPT_RETURNTRANSFER, true);
         $this->curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
 
@@ -58,14 +70,18 @@ class CurlClient {
             $this->curl->setHeader($key, $value);
         }
 
-        $orgHeader = $header;
-        $r = $this->curl->$method($finalUrl, $parameters ?: $postParameters);
+        $this->lastHeader = $orgHeader = $header;
+        $curlParams = $parameters ?: $postParameters;
+        if(empty($curlParams) && !empty($content) && is_array($content)) {
+            $curlParams = $content;
+        }
+        $r = $this->curl->$method($finalUrl, $curlParams);
 
         if($this->curl->http_status_code == 301) {
             $this->url = $this->curl->response_headers['Location'];
             return $this->send($url, $method, $parameters, $postParameters, $orgHeader, $content);
         }
 
-        return ResponseModelMapping::create($url, $r);
+        return ResponseModelMapping::create($url, $r, $this, $analyzedRecursiv);
     }
 }
