@@ -13,7 +13,9 @@ class ResponseModelMapping {
         '/^Channels$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Channel',
         '/^Programs$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Program',
         '/^Files/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\File',
-        '/^Jobs\(.*\)\/OutputMediaAssets/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Asset'
+        '/^Jobs\(.*\)\/OutputMediaAssets/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Asset',
+        '/Channels\(.*\)\/Programs$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Program',
+        '/Programs\(.*\)\/Channel$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Channel'
     ];
 
     /**
@@ -23,7 +25,7 @@ class ResponseModelMapping {
      * @param string $response
      * @return mixed
      */
-    public static function create($type, $response)
+    public static function create($type, $response, $client, $analyzed = true)
     {
         $className = '';
         if(!empty($type)) {
@@ -38,9 +40,9 @@ class ResponseModelMapping {
             $json = json_encode($response);
             $array = json_decode($json, TRUE);
             if(!empty($array['odata.metadata']) || !empty($array['Id'])) {
-                return $className::createFromOptions($array);
+                return $className::createFromOptions(self::analyzedDeferred($array, [$client, $analyzed]));
             } else if(!empty($array['d']['__metadata'])) {
-                return $className::createFromOptions($array['d']);
+                return $className::createFromOptions(self::analyzedDeferred($array['d'], [$client, $analyzed]));
             } else {
                 $results = [];
                 if (!empty($array['d']['results'])) {
@@ -52,7 +54,7 @@ class ResponseModelMapping {
                 if(count($results)) {
                     foreach($results as $entry) {
                         $objectClassName = $className;
-                        $newObject = $objectClassName::createFromOptions($entry);
+                        $newObject = $objectClassName::createFromOptions(self::analyzedDeferred($entry, [$client, $analyzed]));
                         $finalArray[] = $newObject;
                     }
                 }
@@ -61,5 +63,29 @@ class ResponseModelMapping {
             }
         }
         return $response;
+    }
+
+    protected function analyzedDeferred($r, $clientParams)
+    {
+        array_walk($r, ['self', 'addDeferred'], $clientParams);
+        return array_filter($r);
+    }
+
+    protected function addDeferred(&$item, $key, $clientParams) {
+        list($client, $recursiv) = $clientParams;
+        if(is_array($item)) {
+            array_walk($item, ['self', 'addDeferred'], $clientParams);
+            $item = array_filter($item);
+            if(!empty($item['__deferred'])) {
+                $item = $item['__deferred'];
+            }
+        }
+        if($key === '__deferred' && !empty($item['uri'])) {
+            if($recursiv) {
+                $item = $client->send($item['uri'], 'get', [], [], [], '', false);
+            } else {
+                $item = '';
+            }
+        }
     }
 }

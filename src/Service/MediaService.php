@@ -211,6 +211,11 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Programs(\''.$program->getId().'\')/Stop', 'post', [], [], $header);
     }
 
+    public function listPrograms(Channel $channel)
+    {
+        return $this->restClient->send('Channels(\''.$channel->getId().'\')/Programs', 'get', [], [], $this->defaultHeader, '');
+    }
+
     protected function getAll(
         $url,
         $method,
