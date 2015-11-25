@@ -201,6 +201,16 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Programs(\''.$program->getId().'\')/Start', 'post', [], [], $header);
     }
 
+    public function stopProgram(Program $program)
+    {
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Programs(\''.$program->getId().'\')/Stop', 'post', [], [], $header);
+    }
+
     protected function getAll(
         $url,
         $method,
