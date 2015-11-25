@@ -22,6 +22,13 @@ class GuzzleClient {
      */
     protected $guzzle;
 
+    /**
+     * lastHeader
+     *
+     * @var array
+     */
+    protected $lastHeader = [];
+
     public function __construct($url, SettingsInterface $settings, $authorization = '', Client $guzzleObject = null)
     {
         $this->url = $url;
@@ -36,9 +43,14 @@ class GuzzleClient {
         array $parameters = [],
         array $postParameters = [],
         array $header = [],
-        $content = ''
+        $content = '',
+        $analyzedRecursiv = true
     )
     {
+        if(empty($header) && !empty($this->lastHeader)) {
+            $header = $this->lastHeader;
+        }
+
         $method = strtolower($method);
         $finalUrl = strpos($url, '//') !== false ? $url : $this->url . $url;
 
@@ -52,7 +64,7 @@ class GuzzleClient {
             $parameters = $content->toArray();
         }
 
-        $orgHeader = $header;
+        $this->lastHeader = $orgHeader = $header;
 
         $options = array_merge(array_filter([
             'headers' => $header,
@@ -82,8 +94,7 @@ class GuzzleClient {
                 $json = json_encode($xml);
                 $array = json_decode($json, TRUE);
             }
-
-            return ResponseModelMapping::create($url, $array);
+            return ResponseModelMapping::create($url, $array, $this, $analyzedRecursiv);
         } else {
             return $r->getStatusCode();
         }

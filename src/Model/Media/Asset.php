@@ -4,17 +4,6 @@ use TeamNeusta\WindowsAzureCurl\Filter\Edm;
 use TeamNeusta\WindowsAzureCurl\Model\AbstractModel;
 
 
-/**
- * Represents asset object used in media services
- *
- * @category  Microsoft
- * @package   WindowsAzure\MediaServices\Models
- * @author    Azure PHP SDK <azurephpsdk@microsoft.com>
- * @copyright Microsoft Corporation
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @version   Release: 0.4.0_2014-01
- * @link      https://github.com/windowsazure/azure-sdk-for-php
- */
 class Asset extends AbstractModel
 {
     /**
