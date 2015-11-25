@@ -13,6 +13,7 @@ class ResponseModelMapping {
         '/^Channels$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Channel',
         '/^Programs$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Program',
         '/^Files/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\File',
+        '/^AccessPolicies$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\AccessPolicies',
         '/^Jobs\(.*\)\/OutputMediaAssets/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Asset',
         '/Channels\(.*\)\/Programs$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Program',
         '/Programs\(.*\)\/Channel$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Channel'

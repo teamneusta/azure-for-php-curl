@@ -216,6 +216,24 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Channels(\''.$channel->getId().'\')/Programs', 'get', [], [], $this->defaultHeader, '');
     }
 
+    public function publishAsset($policyName, $durationInMinutes, $asset)
+    {
+        $r = $this->restClient->send('AccessPolicies', 'post', [], [], $this->defaultHeader, [
+            'Name' => $policyName,
+            'DurationInMinutes' => (int)$durationInMinutes,
+            'Permissions' => '1'
+        ]);
+
+        $now = new \DateTime();
+        $r = $this->restClient->send('Locators', 'post', [], [], $this->defaultHeader, [
+            'AccessPolicyId' => $r->getId(),
+            'AssetId' => $asset instanceof Asset ? $asset->getId() : $asset,
+            'StartTime' => $now->format('Y-m-d\TH:i:sP'),
+            'Type' => '2'
+        ]);
+        return true;
+    }
+
     protected function getAll(
         $url,
         $method,
