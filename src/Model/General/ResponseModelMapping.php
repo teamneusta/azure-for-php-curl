@@ -19,6 +19,8 @@ class ResponseModelMapping {
         '/Programs\(.*\)\/Channel$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Channel'
     ];
 
+    public static $enableMapping = true;
+
     /**
      * create
      *
@@ -29,7 +31,7 @@ class ResponseModelMapping {
     public static function create($type, $response, $client, $analyzed = true)
     {
         $className = '';
-        if(!empty($type)) {
+        if(!empty($type) && self::$enableMapping === true) {
             foreach(self::$mapping as $key => $class) {
                 if(preg_match($key, $type) > 0) {
                     $className = $class;
@@ -62,6 +64,10 @@ class ResponseModelMapping {
 
                 return $finalArray;
             }
+        }
+
+        if (!empty($response['d']['results']) || isset($response['d']['results'])) {
+            return $response['d']['results'];
         }
         return $response;
     }

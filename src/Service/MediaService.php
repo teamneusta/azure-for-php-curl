@@ -63,6 +63,14 @@ class MediaService implements ServiceInterface
         return $obj;
     }
 
+    public function getAssetByFilter($filter)
+    {
+        $obj = $this->getAll('Assets', 'get', [
+            '$filter' => $filter
+        ], [], $this->defaultHeader);
+        return $obj;
+    }
+
     public function getFilesByFilter($filter)
     {
         $obj = $this->getAll('Files', 'get', [
@@ -259,6 +267,7 @@ class MediaService implements ServiceInterface
         while (!$finish) {
             $results = $this->restClient->send($url, $method, array_merge($parameters, ['$skip' => $skipping]), $postParameters, $header, $content);
             $skipping = 1000 + $skipping;
+            $result = array_filter($results);
             if (empty($results)) {
                 $finish = true;
             } else {
