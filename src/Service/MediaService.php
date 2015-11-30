@@ -129,9 +129,9 @@ class MediaService implements ServiceInterface
 
     public function getJobListByFilter($filter)
     {
-        return $this->getAll('Jobs', 'get', [
+        return $this->getAll('Jobs', 'get', array_filter([
             '$filter' => $filter
-        ], [], $this->defaultHeader);
+        ]), [], $this->defaultHeader);
     }
 
     public function createChannel(Channel $channel)

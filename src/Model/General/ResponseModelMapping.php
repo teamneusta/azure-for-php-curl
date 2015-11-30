@@ -9,7 +9,7 @@ class ResponseModelMapping {
 
     protected static $mapping = [
         '/^Assets$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Asset',
-        '/^Jobs$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Job',
+        '/^Jobs/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Job',
         '/^Channels$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Channel',
         '/^Programs$/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\Program',
         '/^Files/i' => '\TeamNeusta\WindowsAzureCurl\Model\Media\File',
