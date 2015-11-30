@@ -72,13 +72,13 @@ class ResponseModelMapping {
         return $response;
     }
 
-    protected function analyzedDeferred($r, $clientParams)
+    protected static function analyzedDeferred($r, $clientParams)
     {
         array_walk($r, ['self', 'addDeferred'], $clientParams);
         return array_filter($r);
     }
 
-    protected function addDeferred(&$item, $key, $clientParams) {
+    protected static function addDeferred(&$item, $key, $clientParams) {
         list($client, $recursiv) = $clientParams;
         if(is_array($item)) {
             array_walk($item, ['self', 'addDeferred'], $clientParams);
