@@ -71,8 +71,9 @@ abstract class AbstractModel
             }
             $methodName = 'add' . ucfirst($key);
             if (method_exists($this, $methodName)) {
-                if(!empty($value['results'])) {
-                    foreach($value['results'] as $result) {
+                $items = !empty($value['results']) ? $value['results'] : $value;
+                if(!empty($items)) {
+                    foreach($items as $result) {
                         $this->$methodName($result);
                     }
                 }
