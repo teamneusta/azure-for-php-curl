@@ -7,10 +7,8 @@
 namespace TeamNeusta\WindowsAzureCurl\General;
 
 
-use TeamNeusta\WindowsAzureCurl\General\RestClient\GuzzleClient;
 use TeamNeusta\WindowsAzureCurl\Model\General\ResponseModelMapping;
 use TeamNeusta\WindowsAzureCurl\Service\Settings\SettingsInterface;
-use Curl\Curl;
 use TeamNeusta\WindowsAzureCurl\General\RestClient\CurlClient;
 
 class RestClient
