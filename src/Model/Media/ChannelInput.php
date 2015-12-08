@@ -53,9 +53,9 @@ class ChannelInput extends AbstractModel implements ModelInterface
      */
     public function addEndpoints($endpoints) {
         if(is_array($endpoints)) {
-            $this->allow[] = ChannelEndpoint::createFromOptions($endpoints);
+            $this->endpoints[] = ChannelEndpoint::createFromOptions($endpoints);
         } else {
-            $this->allow[] = $endpoints;
+            $this->endpoints[] = $endpoints;
         }
     }
 
