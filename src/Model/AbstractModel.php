@@ -52,7 +52,9 @@ abstract class AbstractModel
                 }
             }
         }
-        $arr = array_filter($arr);
+        $arr = array_filter($arr, function($v, $k) {
+            return (!empty($v) || $v === 0);
+        }, ARRAY_FILTER_USE_BOTH);
         return $arr;
     }
 
