@@ -239,6 +239,16 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Programs(\''.$program->getId().'\')', 'delete', [], [], $header);
     }
 
+    public function getProgram($programId)
+    {
+        $header = array_merge($this->defaultHeader, [
+            'Content-Type' => 'application/json;odata=minimalmetadata',
+            'Accept' => 'application/json;odata=minimalmetadata'
+        ]);
+
+        return $this->restClient->send('Programs(\''.$programId.'\')', 'get', [], [], $header);
+    }
+
     public function listPrograms(Channel $channel)
     {
         return $this->restClient->send('Channels(\''.$channel->getId().'\')/Programs', 'get', [], [], $this->defaultHeader, '');
