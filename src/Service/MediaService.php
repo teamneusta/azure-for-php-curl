@@ -122,16 +122,17 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Jobs(\'' . $job->getId() .'\')/OutputMediaAssets', 'get', [], [], $this->defaultHeader);
     }
 
-    public function getJobListByState($state, $filter = null, $top = 100)
+    public function getJobListByState($state, $filter = null, $top = 1000, $skip = 0)
     {
         return $this->getJobListByFilter('State eq ' . $state . ($filter ? ' and ' . $filter : ''), $top);
     }
 
-    public function getJobListByFilter($filter, $top = 100)
+    public function getJobListByFilter($filter, $top = 1000, $skip = 0)
     {
         return $this->getAll('Jobs', 'get', array_filter([
-            '$filter' => $filter,
             '$top' => $top,
+            '$filter' => $filter,
+            '$skip' => $skip
         ]), [], $this->defaultHeader);
     }
 
@@ -293,6 +294,9 @@ class MediaService implements ServiceInterface
                 $finish = true;
             } else {
                 $newArr = array_merge($newArr, $results);
+                if(!empty($parameters['$top'])) {
+                    $finish = true;
+                }
             }
         }
 
