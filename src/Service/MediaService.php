@@ -122,15 +122,16 @@ class MediaService implements ServiceInterface
         return $this->restClient->send('Jobs(\'' . $job->getId() .'\')/OutputMediaAssets', 'get', [], [], $this->defaultHeader);
     }
 
-    public function getJobListByState($state, $filter = null)
+    public function getJobListByState($state, $filter = null, $top = 100)
     {
-        return $this->getJobListByFilter('State eq ' . $state . ($filter ? ' and ' . $filter : ''));
+        return $this->getJobListByFilter('State eq ' . $state . ($filter ? ' and ' . $filter : ''), $top);
     }
 
-    public function getJobListByFilter($filter)
+    public function getJobListByFilter($filter, $top = 100)
     {
         return $this->getAll('Jobs', 'get', array_filter([
-            '$filter' => $filter
+            '$filter' => $filter,
+            '$top' => $top,
         ]), [], $this->defaultHeader);
     }
 
